@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
+  <!--[if lte IE 8]>
+    <link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.ie.css' rel='stylesheet' />
+  <![endif]-->
+  <script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
+  <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.1"></script>
+  <script src='js/underscore.js'></script>
+  <script src='js/jquery-1.9.1.min.js'></script>
+  <script src='js/backbone.js'></script>
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; width:60%; height: 500px; border: 1px solid black;}
+    #sidebar {float: right;}
+  </style>
+</head>
+<body>
+
+	<h1>Step Map</h1>
+
+  <div id='map-wrap'>
+  </div>
+
+<script>
+
+var Marker = Backbone.Model.extend({
+  defaults: {
+    text: 'ipsum',
+    location: null,
+    marker: null
+  }
+//leaflet constructor
+});
+
+var Markers = Backbone.Collection.extend({
+  model: Marker,
+  url: 'json/2011-count.geojson',
+  parse: function(data) {
+    that = this;
+    // console.log(data.features);
+    _.each(data.features, function(marker, i) {
+      var marker = new Marker(marker);
+      data[i] = marker;
+      // console.log(i, marker);
+    });
+    console.log(data.features);
+    return data.features;
+  }
+});
+
+m1 = new Markers();
+m1.fetch();
+
+var homicides = new Markers();
+
+// view
+var mapView = Backbone.View.extend({
+  id: 'map',
+
+  initialize: function() {
+    var layer = new L.StamenTileLayer("toner");
+    this.map = new L.mapbox.map(this.el);
+    this.map.scrollWheelZoom.disable();
+    this.map.addLayer(layer).setView([41.84308, -87.6984], 12);
+
+    this.render();
+  },
+
+  render: function() {
+    $('#map-wrap').append(this.el);
+  }
+  // setView this.collection
+});
+
+var sidebarView = Backbone.View.extend({
+  tagName: 'div',
+  id: 'sidebar',
+  events: {
+    'click #next': 'goShawtay',
+    'click #prev': 'fity'
+  },
+
+  initialize: function() {
+    this.$el.append('<button id="prev">prev</button>');
+    this.$el.append('<button id="next">next</button>');
+    $('body').append(this.el);
+  },
+
+  goShawtay: function() {
+    var bars = ['go shawtay', "it's your birthday"];
+    _.each(bars, function(b) {
+      console.log(b);
+    });
+  },
+
+  fity: function() {
+    var bars = ['we gon party like', "it's your birthday"];
+    _.each(bars, function(b) {
+      console.log(b);
+    });
+  }
+});
+
+var router = Backbone.Router.extend({
+
+  routes: {
+    '': 'home'
+  },
+
+  home: function() {
+    this.mapview = new mapView();
+    this.sidebar = new sidebarView();
+  }
+});
+
+new router();
+Backbone.history.start();
+
+</script>
+
+
+</html>
