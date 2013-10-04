@@ -12,7 +12,7 @@
   <script src='js/backbone.js'></script>
   <style>
     body { margin:0; padding:0; }
-    #map { position:absolute; top:0; width:60%; height: 500px; border: 1px solid black;}
+    #map-wrap { position:absolute; top:0; width:60%; height: 500px; border: 1px solid black;}
     #sidebar {float: right;}
   </style>
 </head>
@@ -27,13 +27,24 @@
 
 var Marker = Backbone.Model.extend({
   initialize: function() {
-    this.marker = L.circleMarker(this.get('geometry').coordinates, {
+    var coords = this.parseLL();
+
+    this.marker = L.circleMarker(coords, {
       radius: 5,
       fillColor: '#0078A8',
       color: '#333',
       fillOpacity: 0.2,
       opacity: 0.7
     });
+  },
+
+  parseLL: function() {
+    var coordsArr = this.get('geometry').coordinates;
+    return [coordsArr[1], coordsArr[0]];
+  },
+
+  addToMap: function() {
+    window.map.addLayer(this.marker);
   }
 //leaflet constructor
 });
@@ -54,24 +65,10 @@ var Markers = Backbone.Collection.extend({
 m1 = new Markers();
 m1.fetch();
 
-// view
-var mapView = Backbone.View.extend({
-  id: 'map',
-
-  initialize: function() {
-    var layer = new L.StamenTileLayer("toner");
-    this.map = new L.mapbox.map(this.el);
-    this.map.scrollWheelZoom.disable();
-    this.map.addLayer(layer).setView([41.84308, -87.6984], 12);
-
-    this.render();
-  },
-
-  render: function() {
-    $('#map-wrap').append(this.el);
-  }
-  // setView this.collection
-});
+var layer = new L.StamenTileLayer("toner");
+this.map = new L.mapbox.map('map-wrap');
+this.map.scrollWheelZoom.disable();
+this.map.addLayer(layer).setView([41.84308, -87.6984], 10);
 
 var sidebarView = Backbone.View.extend({
   tagName: 'div',
@@ -109,13 +106,14 @@ var router = Backbone.Router.extend({
   },
 
   home: function() {
-    this.mapview = new mapView();
+    // this.mapview = new mapView();
     this.sidebar = new sidebarView();
   }
 });
 
 new router();
 Backbone.history.start();
+
 
 </script>
 
