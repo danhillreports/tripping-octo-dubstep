@@ -26,10 +26,14 @@
 <script>
 
 var Marker = Backbone.Model.extend({
-  defaults: {
-    text: 'ipsum',
-    location: null,
-    marker: null
+  initialize: function() {
+    this.marker = L.circleMarker(this.get('geometry').coordinates, {
+      radius: 5,
+      fillColor: '#0078A8',
+      color: '#333',
+      fillOpacity: 0.2,
+      opacity: 0.7
+    });
   }
 //leaflet constructor
 });
@@ -39,21 +43,16 @@ var Markers = Backbone.Collection.extend({
   url: 'json/2011-count.geojson',
   parse: function(data) {
     that = this;
-    // console.log(data.features);
     _.each(data.features, function(marker, i) {
       var marker = new Marker(marker);
       data[i] = marker;
-      // console.log(i, marker);
     });
-    console.log(data.features);
     return data.features;
   }
 });
 
 m1 = new Markers();
 m1.fetch();
-
-var homicides = new Markers();
 
 // view
 var mapView = Backbone.View.extend({
