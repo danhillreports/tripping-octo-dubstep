@@ -45,6 +45,10 @@ var Marker = Backbone.Model.extend({
 
   addToMap: function() {
     window.map.addLayer(this.marker);
+  },
+
+  focus: function() {
+    window.map.setView(this.parseLL(), 15, {animate:true});
   }
 });
 
