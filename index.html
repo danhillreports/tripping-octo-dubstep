@@ -131,6 +131,7 @@ var router = Backbone.Router.extend({
   },
 
   goToRoute: function(index) {
+    window.INDEX=index;
     if (this.sidebar) {
       this.sidebar.remove();
       m1.remove();
@@ -144,7 +145,6 @@ var router = Backbone.Router.extend({
       }
     });
     }
-    window.INDEX=index;
     this.sidebar = new sidebarView();
     m1.models[window.INDEX].focus();
   }
