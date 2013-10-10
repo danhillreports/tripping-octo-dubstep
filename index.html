@@ -79,16 +79,10 @@ var sidebarView = Backbone.View.extend({
   },
 
   initialize: function() {
-    this.$el.append('<button id="prev">prev</button>');
-    this.$el.append('<button id="next">next</button>');
+    index = parseInt(window.INDEX)+1;
+    this.$el.append('<button id="prev"><a href="/#coffee/'+(index-2)+'">prev</a></button>');
+    this.$el.append('<button id="next"><a href="/#coffee/'+index+'">next</a></button>');
     $('body').append(this.el);
-
-    m1 = new Markers();
-    m1.fetch({
-      success: function() {
-        _.each(m1.models, function(m) {m.addToMap()})
-      }
-    });
   },
 
   goShawtay: function() {
@@ -109,11 +103,39 @@ var sidebarView = Backbone.View.extend({
 var router = Backbone.Router.extend({
 
   routes: {
-    '': 'home'
+    '': 'home',
+    'coffee/:index': 'goToRoute'
   },
 
   home: function() {
+    window.INDEX=0;
+    m1 = new Markers();
+    m1.fetch({
+      success: function() {
+        _.each(m1.models, function(m) {m.addToMap()});
+        m1.models[window.INDEX].focus();
+      }
+    });
     this.sidebar = new sidebarView();
+  },
+
+  goToRoute: function(index) {
+    if (this.sidebar) {
+      this.sidebar.remove();
+      m1.remove();
+    }
+    else {
+      m1 = new Markers();
+      m1.fetch({
+      success: function() {
+        _.each(m1.models, function(m) {m.addToMap()});
+        m1.models[index].focus();
+      }
+    });
+    }
+    window.INDEX=index;
+    this.sidebar = new sidebarView();
+    m1.models[window.INDEX].focus();
   }
 });
 
