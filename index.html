@@ -79,9 +79,20 @@ var sidebarView = Backbone.View.extend({
   },
 
   initialize: function() {
-    index = parseInt(window.INDEX)+1;
-    this.$el.append('<button id="prev"><a href="/#coffee/'+(index-2)+'">prev</a></button>');
-    this.$el.append('<button id="next"><a href="/#coffee/'+index+'">next</a></button>');
+    if (parseInt(INDEX) >= 19) {
+      prev = 18;
+      next = 0;
+    }
+    else if (parseInt(INDEX) <= 0) {
+      prev = 0;
+      next = 1;
+    }
+    else {
+      prev = parseInt(INDEX)-1;
+      next = parseInt(INDEX)+1;
+    }
+    this.$el.append('<button id="prev"><a href="/#coffee/'+prev+'">prev</a></button>');
+    this.$el.append('<button id="next"><a href="/#coffee/'+next+'">next</a></button>');
     $('body').append(this.el);
   },
 
