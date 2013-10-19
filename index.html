@@ -25,15 +25,17 @@
 
 <script>
 
+var Icon  = L.icon({  
+  iconUrl: 'mug.png'  
+
+})
+
 var Marker = Backbone.Model.extend({
   initialize: function() {
     var coords = this.parseLL();
 
-    this.marker = L.circleMarker(coords, {
-      radius: 5,
-      fillColor: '#0078A8',
-      color: '#333',
-      fillOpacity: 0.2,
+    this.marker = L.marker(coords, {
+      icon: Icon,
       opacity: 0.7
     });
   },
