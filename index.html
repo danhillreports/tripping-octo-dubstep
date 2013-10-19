@@ -13,7 +13,8 @@
   <style>
     body { margin:0; padding:0; }
     #map-wrap { position:absolute; top:0; width:600px; height: 500px; border: 1px solid black; float:left;}
-    #sidebar {position:absolute; top:20px; left: 470px;}
+    #sidebar { position:absolute; top:20px; left: 470px; }
+    #sidebar a { color: #0078A8; }
   </style>
 </head>
 <body>
@@ -54,7 +55,7 @@ var Marker = Backbone.Model.extend({
   },
 
   focus: function() {
-    window.map.setView(this.parseLL(), 15, {animate:true});
+    window.map.setView(this.parseLL(), 13, {animate:true});
   }
 });
 
