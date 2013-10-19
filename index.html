@@ -61,7 +61,7 @@ var Marker = Backbone.Model.extend({
 
 var Markers = Backbone.Collection.extend({
   model: Marker,
-  url: 'json/2011-count.geojson',
+  url: 'json/wifi.geojson',
   parse: function(data) {
     that = this;
     _.each(data.features, function(marker, i) {
