@@ -12,8 +12,8 @@
   <script src='js/backbone.js'></script>
   <style>
     body { margin:0; padding:0; }
-    #map-wrap { position:absolute; top:0; width:60%; height: 500px; border: 1px solid black;}
-    #sidebar {float: right;}
+    #map-wrap { position:absolute; top:0; width:600px; height: 500px; border: 1px solid black; float:left;}
+    #sidebar {position:absolute; top:20px; left: 470px;}
   </style>
 </head>
 <body>
@@ -38,6 +38,10 @@ var Marker = Backbone.Model.extend({
       icon: Icon,
       opacity: 0.7
     });
+
+    var markUp = '<em>'+this.attributes.properties.name+'</em>'+'</br>'+this.attributes.properties.address+'</br>'+this.attributes.properties.borough+' '+this.attributes.properties.city+', '+this.attributes.properties.state;
+
+    this.marker.bindPopup(markUp);
   },
 
   parseLL: function() {
@@ -75,10 +79,6 @@ this.map.addLayer(layer).setView([41.64828831259535, -72.89978027343749], 7);
 var sidebarView = Backbone.View.extend({
   tagName: 'div',
   id: 'sidebar',
-  events: {
-    'click #next': 'goShawtay',
-    'click #prev': 'fity'
-  },
 
   initialize: function() {
     if (parseInt(INDEX) >= 19) {
@@ -93,23 +93,9 @@ var sidebarView = Backbone.View.extend({
       prev = parseInt(INDEX)-1;
       next = parseInt(INDEX)+1;
     }
-    this.$el.append('<button id="prev"><a href="/#coffee/'+prev+'">prev</a></button>');
-    this.$el.append('<button id="next"><a href="/#coffee/'+next+'">next</a></button>');
+    this.$el.append('<button id="prev"><a href="/#coffee/'+prev+'">Previous</a></button>');
+    this.$el.append('<button id="next"><a href="/#coffee/'+next+'">Next</a></button>');
     $('body').append(this.el);
-  },
-
-  goShawtay: function() {
-    var bars = ['go shawtay', "it's your birthday"];
-    _.each(bars, function(b) {
-      console.log(b);
-    });
-  },
-
-  fity: function() {
-    var bars = ['we gon party like', "it's your birthday"];
-    _.each(bars, function(b) {
-      console.log(b);
-    });
   }
 });
 
