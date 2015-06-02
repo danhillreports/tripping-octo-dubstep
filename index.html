@@ -56,6 +56,7 @@ var Marker = Backbone.Model.extend({
 
   focus: function() {
     window.map.setView(this.parseLL(), 13, {animate:true});
+    this.marker.openPopup();
   }
 });
 
@@ -142,8 +143,6 @@ var router = Backbone.Router.extend({
 new router();
 Backbone.history.start();
 
-
 </script>
-
 
 </html>
